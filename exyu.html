@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ex Yu</title>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background: #000;
+      }
+
+      #video-background {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+      }
+
+      #audio-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .button.start-button,
+      .button.stop-button {
+        --offset: 10px;
+        --border-size: 2px;
+        display: block;
+        position: relative;
+        padding: 1.5em 3em;
+        appearance: none;
+        border: 0;
+        background: transparent;
+        color: #e55743;
+        text-transform: uppercase;
+        letter-spacing: .25em;
+        outline: none;
+        cursor: pointer;
+        font-weight: bold;
+        border-radius: 0;
+        box-shadow: inset 0 0 0 var(--border-size) currentcolor;
+        transition: background .8s ease;
+      }
+      .button.start-button {
+        color: green;
+        margin-right: 8px;
+      }
+
+      .button.start-button:hover,
+      .button.stop-button:hover {
+        background: rgba(100, 0, 0, .03);
+      }
+
+      .button.start-button .button__horizontal,
+      .button.start-button .button__vertical,
+      .button.stop-button .button__horizontal,
+      .button.stop-button .button__vertical {
+        position: absolute;
+        top: var(--horizontal-offset, 0);
+        right: var(--vertical-offset, 0);
+        bottom: var(--horizontal-offset, 0);
+        left: var(--vertical-offset, 0);
+        transition: transform .8s ease;
+        will-change: transform;
+
+        &::before {
+          content: '';
+          position: absolute;
+          border: inherit;
+        }
+      }
+
+      .button.start-button .button__horizontal {
+        --vertical-offset: calc(var(--offset) * -1);
+        border-top: var(--border-size) solid currentcolor;
+        border-bottom: var(--border-size) solid currentcolor;
+
+        &::before {
+          top: calc(var(--vertical-offset) - var(--border-size));
+          bottom: calc(var(--vertical-offset) - var(--border-size));
+          left: calc(var(--vertical-offset) * -1);
+          right: calc(var(--vertical-offset) * -1);
+        }
+      }
+
+      .button.start-button:hover .button__horizontal {
+        transform: scaleX(0);
+      }
+
+      .button.start-button .button__vertical {
+        --horizontal-offset: calc(var(--offset) * -1);
+        border-left: var(--border-size) solid currentcolor;
+        border-right: var(--border-size) solid currentcolor;
+
+        &::before {
+          top: calc(var(--horizontal-offset) * -1);
+          bottom: calc(var(--horizontal-offset) * -1);
+          left: calc(var(--horizontal-offset) - var(--border-size));
+          right: calc(var(--horizontal-offset) - var(--border-size));
+        }
+      }
+
+      .button.start-button:hover .button__vertical {
+        transform: scaleY(0);
+      }
+      
+      .button.stop-button:hover {
+         background-color: rgb(250, 24, 24);
+         color: rgb(170, 3, 3);
+      }
+
+      .button.stop-button .button__horizontal,
+      .button.stop-button .button__vertical {
+        display: none;
+      }
+
+      #myAudio {
+        position: fixed;
+        bottom: 25px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <video id="video-background" autoplay loop muted>
+      <source src="exyu/citymerge.mp4" type="video/mp4">
+    </video>
+
+    <div id="audio-controls">
+      <button class="button start-button" id="startButton" onclick="startAudio()">Play
+        <div class="button__horizontal"></div>
+        <div class="button__vertical"></div>
+      </button>
+      <button class="button stop-button" id="stopButton" onclick="stopAudio()" disabled>Pause
+        <div class="button__horizontal"></div>
+        <div class="button__vertical"></div>
+      </button>
+    </div>
+
+    <audio id="myAudio" controls loop>
+      <source src="exyu/exyuu.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+      var video = document.getElementById("video-background");
+      var audio = document.getElementById("myAudio");
+      var startButton = document.getElementById("startButton");
+      var stopButton = document.getElementById("stopButton");
+
+      video.addEventListener('ended', function() {
+        video.currentTime = 0;
+        video.play();
+      });
+
+      function startAudio() {
+        audio.play();
+        startButton.disabled = true;
+        stopButton.disabled = false;
+      }
+
+      function stopAudio() {
+        audio.pause();
+        startButton.disabled = false;
+        stopButton.disabled = true;
+      }
+    </script>
+  </body>
+</html>
